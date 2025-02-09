@@ -1,0 +1,10 @@
+pre-commit
+black
+isort
+pipx
+uv
+
+flake8
+pylint
+mypy
+pyment

@@ -1,0 +1,7 @@
+PyYAML
+mistralai
+streamlit
+langchain
+langchain_openai
+langchain_mistralai
+manim
