@@ -7,7 +7,7 @@
 Generate videos to explain a concept.
 Powered by Mistral models, based on [Manim](https://github.com/manimCommunity/manim).
 
-![alt text](https://github.com/bilelsgh/explainme/blob/master/config/architecture.png)
+![alt text](https://github.com/bilelsgh/explainme/tree/master/config/architecture.png)
 
 
 ### Run

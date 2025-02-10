@@ -22,7 +22,6 @@ config/conf.yaml
 mlruns
 mlartifacts
 *.xlsx
-*.png
 *.xml
 .idea/
 git-filter-repo.py
