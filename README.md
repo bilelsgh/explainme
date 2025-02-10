@@ -4,8 +4,11 @@
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-Generate animation to explain a concept.
-Powered by Mistral models.
+Generate videos to explain a concept.
+Powered by Mistral models, based on [Manim](https://github.com/manimCommunity/manim).
+
+![alt text](https://github.com/bilelsgh/explainme/blob/master/config/architecture.png)
+
 
 ### Run
 
