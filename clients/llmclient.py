@@ -53,8 +53,9 @@ class AvailableModel:
 
 
 AVAILABLE_MODELS = {
-    "deepseek-r1": AvailableModel(model_family="DEEPSEEK_R1", name="deepseek-chat"),
     "mistral-large": AvailableModel(
         model_family="MISTRAL", name="mistral-large-latest"
     ),
+    "codestral-latest": AvailableModel(model_family="MISTRAL", name="codestral-latest"),
+    "deepseek-r1": AvailableModel(model_family="DEEPSEEK_R1", name="deepseek-chat"),
 }

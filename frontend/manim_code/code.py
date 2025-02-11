@@ -7,75 +7,119 @@ from manim import *
 
 class DynamicScene(Scene):
     def construct(self):
-        # Title
-        title = Text("Quick Sort").to_edge(UP)
-        self.play(Write(title))
+        # Initial list
+        initial_list = [1, 5, -9, 25, -98, 547, 3, 6, -87]
+        list_mob = [Tex(str(num)).scale(0.8) for num in initial_list]
+
+        # Arrange list items horizontally
+        list_group = VGroup(*list_mob).arrange(RIGHT, buff=1)
+        list_group.move_to(UP)
+
+        # Display initial list
+        self.play(FadeIn(list_group))
         self.wait(1)
 
-        # Introduction to the concept
-        intro_text = (
-            Text(
-                "Quick Sort is a sorting algorithm that uses divide and conquer to sort an array."
+        # Merge sort function
+        def merge_sort(arr):
+            if len(arr) <= 1:
+                return arr
+            mid = len(arr) // 2
+            left = merge_sort(arr[:mid])
+            right = merge_sort(arr[mid:])
+            return merge(left, right)
+
+        def merge(left, right):
+            sorted_list = []
+            i = j = 0
+            while i < len(left) and j < len(right):
+                if left[i] <= right[j]:
+                    sorted_list.append(left[i])
+                    i += 1
+                else:
+                    sorted_list.append(right[j])
+                    j += 1
+            sorted_list.extend(left[i:])
+            sorted_list.extend(right[j:])
+            return sorted_list
+
+        # Animate merge sort
+        def animate_merge_sort(arr):
+            if len(arr) <= 1:
+                return arr
+            mid = len(arr) // 2
+            left = animate_merge_sort(arr[:mid])
+            right = animate_merge_sort(arr[mid:])
+            return animate_merge(left, right)
+
+        def animate_merge(left, right):
+            sorted_list = []
+            i = j = 0
+            left_mob = [Tex(str(num)).scale(0.8) for num in left]
+            right_mob = [Tex(str(num)).scale(0.8) for num in right]
+            left_group = (
+                VGroup(*left_mob).arrange(RIGHT, buff=1).move_to(UP * 2 + LEFT * 3)
             )
-            .scale(0.5)
-            .move_to(UP * 2)
-        )
-        self.play(Write(intro_text))
+            right_group = (
+                VGroup(*right_mob).arrange(RIGHT, buff=1).move_to(UP * 2 + RIGHT * 3)
+            )
+
+            self.play(
+                Transform(list_group, left_group),
+                Transform(list_group.copy(), right_group),
+            )
+            self.wait(1)
+
+            while i < len(left) and j < len(right):
+                if left[i] <= right[j]:
+                    sorted_list.append(left[i])
+                    self.play(
+                        left_group[i].animate.move_to(
+                            list_group[len(sorted_list) - 1].get_center()
+                        )
+                    )
+                    i += 1
+                else:
+                    sorted_list.append(right[j])
+                    self.play(
+                        right_group[j].animate.move_to(
+                            list_group[len(sorted_list) - 1].get_center()
+                        )
+                    )
+                    j += 1
+                self.wait(0.5)
+
+            while i < len(left):
+                sorted_list.append(left[i])
+                self.play(
+                    left_group[i].animate.move_to(
+                        list_group[len(sorted_list) - 1].get_center()
+                    )
+                )
+                i += 1
+                self.wait(0.5)
+
+            while j < len(right):
+                sorted_list.append(right[j])
+                self.play(
+                    right_group[j].animate.move_to(
+                        list_group[len(sorted_list) - 1].get_center()
+                    )
+                )
+                j += 1
+                self.wait(0.5)
+
+            self.play(FadeOut(left_group), FadeOut(right_group))
+            return sorted_list
+
+        # Perform merge sort animation
+        sorted_list = animate_merge_sort(initial_list)
+
+        # Display sorted list
+        sorted_list_mob = [Tex(str(num)).scale(0.8) for num in sorted_list]
+        sorted_list_group = VGroup(*sorted_list_mob).arrange(RIGHT, buff=1).move_to(UP)
+        self.play(Transform(list_group, sorted_list_group))
         self.wait(2)
 
-        # Example array
-        array = [3, 7, 8, 5, 2, 1, 9, 5, 4]
-        array_text = Text("Array: " + str(array)).scale(0.5).move_to(UP * 1.5)
-        self.play(Write(array_text))
-        self.wait(2)
-
-        # Step-by-step quick sort visualization
-        self.play(FadeOut(intro_text))
-
-        # Initial array visualization
-        array_mob = (
-            VGroup(*[Text(str(num)).scale(0.5) for num in array])
-            .arrange(RIGHT, buff=0.5)
-            .move_to(DOWN)
-        )
-        self.play(Write(array_mob))
-        self.wait(1)
-
-        # Quick sort steps
-        def quick_sort(arr, low, high):
-            if low < high:
-                pi = partition(arr, low, high)
-                quick_sort(arr, low, pi - 1)
-                quick_sort(arr, pi + 1, high)
-
-        def partition(arr, low, high):
-            i = low - 1
-            pivot = arr[high]
-            for j in range(low, high):
-                if arr[j] <= pivot:
-                    i = i + 1
-                    arr[i], arr[j] = arr[j], arr[i]
-                    self.play(Swap(array_mob[i], array_mob[j]))
-                    self.wait(0.5)
-            arr[i + 1], arr[high] = arr[high], arr[i + 1]
-            self.play(Swap(array_mob[i + 1], array_mob[high]))
-            self.wait(0.5)
-            return i + 1
-
-        quick_sort(array, 0, len(array) - 1)
-        self.wait(2)
-
-        # Conclusion text
-        conclusion_text = (
-            Text("Sorted Array: " + str(array)).scale(0.5).move_to(DOWN * 2)
-        )
-        self.play(Write(conclusion_text))
-        self.wait(2)
-
-        # Clean up the scene
-        self.play(FadeOut(array_text), FadeOut(array_mob), FadeOut(conclusion_text))
-        self.wait(1)
-
-        # End of scene
-        self.play(FadeOut(title))
+        # Clean up
+        self.play(FadeOut(list_group))
         self.wait(1)

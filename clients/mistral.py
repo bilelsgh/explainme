@@ -19,8 +19,8 @@ class MistralClient(LLMClient):
         super().__init__(model_name)
         self.client = ChatMistralAI(
             model=model_name,
-            temperature=0,
-            max_retries=2,
+            temperature=0.5,
+            max_retries=3,
         )
 
         self._init_conversation_context(prompt_instruction)
@@ -40,6 +40,7 @@ class MistralClient(LLMClient):
 
         try:
             response = self.conversation_chain.run(user_args)
+            self.memory.clear()
             return response
         except Exception as e:
             return f"An error occurred: {e}"
